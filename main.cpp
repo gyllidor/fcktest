@@ -7,6 +7,7 @@ public:
     virtual ~A() { std::cout << "~A()" << std::endl; }
 
     void f1() { std::cout << "A::f1()" << std::endl; }
+    void f2() { std::cout << "A::f2()" << std::endl; }
     void f2() const { std::cout << "A::f2() const" << std::endl; }
     virtual void f3() { std::cout << "virtual A::f3()" << std::endl; }
     static void f4() { std::cout << "static A::f4()" << std::endl; }
@@ -27,6 +28,7 @@ public:
     } c;
 
     void f1() { std::cout << "B::f1()" << std::endl; }
+    void f2() { std::cout << "B::f2()" << std::endl; }
     void f2() const { std::cout << "B::f2() const" << std::endl; }
     virtual void f3() { std::cout << "virtual B::f3()" << std::endl; }
     static void f4() { std::cout << "static B::f4()" << std::endl; }
@@ -34,9 +36,19 @@ public:
     void f5(long i) { std::cout << "B::f5 long(" << i << ")" << std::endl; }
 };
 
+struct Empty
+{
+};
+
+struct EmptyWithVTable
+{
+    virtual void Get();
+};
+
 int main(int argc, char *argv[])
 {
     int a[100];
+
     for (int* i = a; i != &a[100]; ++i)
     {
         std::cout << i << " " << a << std::endl;
@@ -47,6 +59,7 @@ int main(int argc, char *argv[])
     std::cout << *(a + 25) << std::endl;
 
     B b;
+    // const A& a1 = b;
     A& a1 = b;
     a1.f1();
     a1.f2();
@@ -54,6 +67,9 @@ int main(int argc, char *argv[])
     a1.f4();
     a1.f5(INT32_MAX + 1);
     std::cout << INT32_MAX << std::endl;
+
+    std::cout << "sizeof(Empty) " << sizeof(Empty) << std::endl;
+    std::cout << "sizeof(EmptyWithVTable) " << sizeof(EmptyWithVTable) << std::endl;
 
     return 0;
 }

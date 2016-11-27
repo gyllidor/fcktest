@@ -45,6 +45,26 @@ struct EmptyWithVTable
     virtual void Get();
 };
 
+struct AA
+{
+    AA(const std::string& str) { std::cout << "AA " << str << std::endl; }
+};
+
+struct BB1 : virtual public AA
+{
+    BB1() : AA("BB1") {std::cout << "BB1" << std::endl;}
+};
+
+struct BB2 : virtual public AA
+{
+    BB2() : AA("BB2") {std::cout << "BB2" << std::endl;}
+};
+
+struct CC : public BB1, public BB2
+{
+    CC() : AA("CC") {std::cout << "CC" << std::endl;} // compile error without AA("CC")
+};
+
 int main(int argc, char *argv[])
 {
     int a[100];
@@ -70,6 +90,8 @@ int main(int argc, char *argv[])
 
     std::cout << "sizeof(Empty) " << sizeof(Empty) << std::endl;
     std::cout << "sizeof(EmptyWithVTable) " << sizeof(EmptyWithVTable) << std::endl;
+
+    CC c;
 
     return 0;
 }
